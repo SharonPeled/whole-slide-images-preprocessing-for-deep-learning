@@ -7,22 +7,22 @@ import pandas as pd
 
 
 class SlideDataset(Logger):
-    def __init__(self, slides_dir, slide_log_file_args, device, sample, load_metadata=True, slide_ids=None):
+    def __init__(self, slides_dir, slide_log_file_args, device, sample, load_metadata=True, slide_uuids=None):
         self.sample = sample
         self.device = device
         self.slides_dir = slides_dir
         self.slide_paths_list = list(sorted(glob(f"{slides_dir}/**/*.svs", recursive=True)))
         self._log(f'Found {len(self.slide_paths_list)} slides in {slides_dir}', log_importance=1)
-        if slide_ids is not None:
-            slide_ids = [slide_id.strip("'") for slide_id in slide_ids]
+        if slide_uuids is not None:
+            slide_uuids = [slide_id.strip("'") for slide_id in slide_uuids]
             df_slides = pd.DataFrame({'slide_path': self.slide_paths_list})
             df_slides.set_index(df_slides.slide_path.apply(lambda path: os.path.basename(os.path.dirname(path))),
                                 drop=True, inplace=True)  # slide_uuids as index
-            slide_ids_with_path = [slide_id for slide_id in slide_ids if slide_id in df_slides.index.values]
+            slide_ids_with_path = [slide_id for slide_id in slide_uuids if slide_id in df_slides.index.values]
             self.slide_paths_list = list(df_slides.loc[slide_ids_with_path].slide_path.values)
-            if len(self.slide_paths_list) != len(slide_ids):
-                slide_ids_without_path = [slide_id for slide_id in slide_ids if slide_id not in slide_ids_with_path]
-                self._log(f'{len(slide_ids)} slide ids was received but only {len(self.slide_paths_list)} found!!' , log_importance=1)
+            if len(self.slide_paths_list) != len(slide_uuids):
+                slide_ids_without_path = [slide_id for slide_id in slide_uuids if slide_id not in slide_ids_with_path]
+                self._log(f'{len(slide_uuids)} slide ids was received but only {len(self.slide_paths_list)} found!!' , log_importance=1)
                 self._log(f'ERROR '*20, log_importance=1)
                 self._log(f'Missing slides: {slide_ids_without_path}', log_importance=1)
         self.slides = None

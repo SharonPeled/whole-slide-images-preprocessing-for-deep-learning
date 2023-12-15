@@ -6,7 +6,7 @@ from src.configs import Configs
 from src.components.objects.ParallelProcessingManager import ParallelProcessingManager
 
 
-def execute_preprocessing_pipeline(with_tiling, num_processes, slide_ids):
+def execute_preprocessing_pipeline(with_tiling, num_processes, slide_uuids):
     Logger.log('Starting preprocessing ..', log_importance=1)
 
     process_manager = ParallelProcessingManager(num_processes=num_processes,
@@ -20,7 +20,7 @@ def execute_preprocessing_pipeline(with_tiling, num_processes, slide_ids):
                                  device=Configs.get('PREPROCESSING_DEVICE'),
                                  slide_log_file_args=Configs.get('PROGRAM_LOG_FILE_ARGS'),
                                  sample=Configs.get('SAMPLE_PROCESSED_TILES'),
-                                 slide_ids=slide_ids)
+                                 slide_uuids=slide_uuids)
 
     pipeline_list = [
         ('slide', Pipeline([

@@ -27,10 +27,10 @@ def main():
 
     if args.preprocess:
         from src.preprocessing.pipeline import execute_preprocessing_pipeline
-        execute_preprocessing_pipeline(with_tiling=True, num_processes=args.num_processes, slide_ids=args.slide_ids)
+        execute_preprocessing_pipeline(with_tiling=True, num_processes=args.num_processes, slide_uuids=args.slide_uuids)
     if args.thumbnails_only:
         from src.preprocessing.pipeline import execute_preprocessing_pipeline
-        execute_preprocessing_pipeline(with_tiling=False, num_processes=args.num_processes, slide_ids=args.slide_ids)
+        execute_preprocessing_pipeline(with_tiling=False, num_processes=args.num_processes, slide_uuids=args.slide_uuids)
     if args.bring_slide_logs:
         bring_joined_log_file(Configs.get('SLIDES_DIR'), Configs.get('PROGRAM_LOG_FILE_ARGS')[0], args.bring_slide_logs)
     if args.bring_thumbnails:
