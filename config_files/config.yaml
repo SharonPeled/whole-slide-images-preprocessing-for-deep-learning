@@ -1,0 +1,50 @@
+general_configs:
+  RANDOM_SEED: 1234
+  VERBOSE: 2  # 1 logs to LOG_FILE, 2 logs to console, 3 logs to both to file and console
+  LOG_IMPORTANCE: 1  # 0 (all), 1 or 2 (only high importance logs)
+  PROGRAM_LOG_FILE_ARGS: ['log.txt', 'a+']  # preprocessing log, slide level log is in the slide dir. Use --bring-slide-logs to get all slide logs.
+  LOG_FORMAT:
+    format: '%(process)d  %(asctime)s  [%(name)s] - %(message)s'
+    datefmt: '%d-%m-%y %H:%M:%S'
+
+preprocessing_configs:
+  # assuming TCGA folder structure, where each slide is in a separate dir and the dir is named after the slide_uuid
+  SLIDES_DIR: /home/sharonpe/work/microsatellite-instability-classification/data/slides  # input
+  PROCESSED_TILES_DIR: /home/sharonpe/work/microsatellite-instability-classification/data/processed_tiles_None  # output
+  TILE_SIZE: 512  # should be divisible by downsample of reduced slide (usually 16, 32 or 64)
+  PREPROCESS_RUN_NAME: '512'  # used to distinguish between different runs
+  TILE_PROGRESS_LOG_FREQ: 1000  # reports progress from every process after x tiles
+  LOAD_METADATA: true
+  PREPROCESSING_DEVICE: 'cpu'  # the background filtering (convolution) could be done on a GPU (beneficial for slides without/low downsample)
+  SAMPLE_PROCESSED_TILES: null, # max number of tiles to sample from each slide, per tile size
+  REDUCED_LEVEL_TO_MEMORY: [3, 2]  # levels of .svs downsamled thumbnail, attempting to load according to order
+  TARGET_MAG_POWER: 20
+  MAG_ATTR: 'openslide.objective-power'
+  TILE_NON_TISSUE_THRESHOLD: 0.5  # tiles with more non-tissue fraction than threshold are filtered
+  OTSU_FILTER:  # parameters for otsu background filtering
+    reduced_img_factor: 0.8
+    attr_name: 'Background'
+    color_palette:
+      s: 10
+      otsu_val_factor: 1.1
+  BLACK_FILTER:
+    attr_name: 'Black'
+    color_palette:
+    - v: 50
+    - v: 200
+      s: 25
+  PEN_FILTER:
+    attr_name: 'Pen'
+    attr_name_not_filtered: 'Pen_not_filtered'
+    min_pen_tiles: 0.025
+    color_palette: null  # loads params using get_pen_color_palette()
+  TISSUE_ATTR: 'Tissue'
+  ATTRS_TO_COLOR_MAP:
+    TISSUE_ATTR: 'pink'
+    Background: 'white'
+    Black: 'grey'
+    Pen: 'green'
+    Pen_not_filtered: 'blue'
+
+multiprocessing_configs:
+  MANIFEST_PATH: /path/to/your/data/slides/manifest_all_dx_slides_unlabeled_COAD_READ_UCEC_STAD_ESCA.tsv
