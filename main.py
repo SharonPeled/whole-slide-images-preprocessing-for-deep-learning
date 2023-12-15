@@ -18,12 +18,12 @@ def main():
 
     Configs.deploy_yaml_file(args.config_filepath)
 
-    set_global_configs(verbose=Configs.VERBOSE,
-                       log_file_args=Configs.PROGRAM_LOG_FILE_ARGS,
-                       log_importance=Configs.LOG_IMPORTANCE,
-                       log_format=Configs.LOG_FORMAT,
-                       random_seed=Configs.RANDOM_SEED,
-                       tile_progress_log_freq=Configs.TILE_PROGRESS_LOG_FREQ)
+    set_global_configs(verbose=Configs.get('VERBOSE'),
+                       log_file_args=Configs.get('PROGRAM_LOG_FILE_ARGS'),
+                       log_importance=Configs.get('LOG_IMPORTANCE'),
+                       log_format=Configs.get('LOG_FORMAT'),
+                       random_seed=Configs.get('RANDOM_SEED'),
+                       tile_progress_log_freq=Configs.get('TILE_PROGRESS_LOG_FREQ'))
 
     if args.preprocess:
         from src.preprocessing.pipeline import execute_preprocessing_pipeline
@@ -32,13 +32,13 @@ def main():
         from src.preprocessing.pipeline import execute_preprocessing_pipeline
         execute_preprocessing_pipeline(with_tiling=False, num_processes=args.num_processes, slide_ids=args.slide_ids)
     if args.bring_slide_logs:
-        bring_joined_log_file(Configs.SLIDES_DIR, Configs.PROGRAM_LOG_FILE_ARGS[0], args.bring_slide_logs)
+        bring_joined_log_file(Configs.get('SLIDES_DIR'), Configs.get('PROGRAM_LOG_FILE_ARGS')[0], args.bring_slide_logs)
     if args.bring_thumbnails:
-        bring_files(Configs.SLIDES_DIR, Configs.THUMBNAIL_FILENAME, args.bring_thumbnails)
+        bring_files(Configs.get('SLIDES_DIR'), Configs.get('THUMBNAIL_FILENAME'), args.bring_thumbnails)
     if args.bring_tumor_thumbnails:
-        bring_files(Configs.SLIDES_DIR, Configs.TUMOR_THUMBNAIL_FILENAME, args.bring_tumor_thumbnails)
+        bring_files(Configs.get('SLIDES_DIR'), Configs.get('TUMOR_THUMBNAIL_FILENAME'), args.bring_tumor_thumbnails)
     if args.bring_semantic_seg_thumbnails:
-        bring_files(Configs.SLIDES_DIR, Configs.SS_THUMBNAIL_FILENAME, args.bring_semantic_seg_thumbnails)
+        bring_files(Configs.get('SLIDES_DIR'), Configs.get('SS_THUMBNAIL_FILENAME'), args.bring_semantic_seg_thumbnails)
 
 
 if __name__ == "__main__":

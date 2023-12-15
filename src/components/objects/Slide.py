@@ -10,7 +10,6 @@ import traceback
 import datetime
 from collections import defaultdict
 from torchvision import transforms
-import torchstain
 import time
 import warnings
 import numpy as np
@@ -226,12 +225,3 @@ class Slide(Image):
         otsu_val = self.get('otsu_val', soft=True)
         return f"""<{type(self).__name__} - shape:{shape}, otsu_val:{otsu_val}, uuid:{self.get('slide_uuid')}>"""
 
-    def fit_color_normalizer(self, ref_img_path):
-        ref_img = pyvips.Image.new_from_file(ref_img_path)
-        T = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Lambda(lambda x: x * 255)
-        ])
-        torch_normalizer = torchstain.normalizers.MacenkoNormalizer(backend='torch')
-        torch_normalizer.fit(T(ref_img.numpy()))
-        self.color_normalizer = torch_normalizer
