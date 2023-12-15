@@ -1,6 +1,6 @@
 import logging
 import logging.config
-
+import sys
 
 class Logger:
     """
@@ -34,16 +34,23 @@ class Logger:
     @staticmethod
     def set_default_logger(verbose, log_file_args, log_importance, log_format, tile_progress_log_freq):
         Logger.TILE_PROGRESS_LOG_FREQ = tile_progress_log_freq
+
+        handlers = []
+
         if verbose == 1:
-            logging.basicConfig(handlers=[logging.FileHandler(*log_file_args), ],
-                                level=Logger.LOG_IMPORTANCE_MAP[log_importance],
-                                **log_format)
-        elif verbose == 2:
-            logging.basicConfig(handlers=[logging.StreamHandler(), ], level=Logger.LOG_IMPORTANCE_MAP[log_importance],
-                                **log_format)
-        elif verbose == 3:
-            logging.basicConfig(handlers=[logging.FileHandler(*log_file_args), logging.StreamHandler()],
-                                level=Logger.LOG_IMPORTANCE_MAP[log_importance], **log_format)
+            handlers.append(logging.FileHandler(*log_file_args))
+
+        if verbose == 2:
+            handlers.append(logging.StreamHandler(stream=sys.stdout))
+
+        if verbose == 3:
+            handlers.append(logging.FileHandler(*log_file_args))
+            handlers.append(logging.StreamHandler(stream=sys.stdout))
+
+        if log_importance == 2:
+            handlers.append(logging.StreamHandler(stream=sys.stderr))
+
+        logging.basicConfig(handlers=handlers, level=Logger.LOG_IMPORTANCE_MAP[log_importance], **log_format)
 
     @staticmethod
     def add_importance_level_to_msg(msg, log_importance):
