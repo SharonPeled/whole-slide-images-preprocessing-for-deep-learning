@@ -2,6 +2,8 @@ import argparse
 from src.utils import bring_files, bring_joined_log_file, get_time, set_global_configs
 from src.configs import Configs
 import matplotlib
+import warnings
+warnings.filterwarnings("ignore")
 matplotlib.use('agg')
 
 

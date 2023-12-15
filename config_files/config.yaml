@@ -16,7 +16,7 @@ preprocessing_configs:
   TILE_PROGRESS_LOG_FREQ: 1000  # reports progress from every process after x tiles
   LOAD_METADATA: true
   PREPROCESSING_DEVICE: 'cpu'  # the background filtering (convolution) could be done on a GPU (beneficial for slides without/low downsample)
-  SAMPLE_PROCESSED_TILES: null, # max number of tiles to sample from each slide, per tile size
+  SAMPLE_PROCESSED_TILES: null  # max number of tiles to sample from each slide, per tile size
   REDUCED_LEVEL_TO_MEMORY: [3, 2]  # levels of .svs downsamled thumbnail, attempting to load according to order
   TARGET_MAG_POWER: 20
   MAG_ATTR: 'openslide.objective-power'
