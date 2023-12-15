@@ -1,3 +1,7 @@
+import torch
+import numpy as np
+import torch
+from torch.nn.functional import conv2d
 
 
 def conv2d_to_device(img_np, kernel_size, stride, device):
@@ -9,7 +13,7 @@ def conv2d_to_device(img_np, kernel_size, stride, device):
         raise Exception(f"conv2d: Invalid shape {img_np.shape}")
     img_t = torch.from_numpy(img_np).to(device).reshape(new_shape)
     return conv2d(img_t.float(), torch.ones((1, 1, kernel_size, kernel_size), device=device).float(),
-                  stride=stride).squeeze().cpu().numpy()
+                        stride=stride).squeeze().cpu().numpy()
 
 
 def center_crop_from_tile_size(height, width, tile_size):

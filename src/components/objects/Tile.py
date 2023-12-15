@@ -1,8 +1,7 @@
 import os
 import numpy as np
 import pyvips
-from .Image import Image
-from PIL import Image as PLI_Image
+from src.components.objects.Image import Image
 
 
 class Tile(Image):

@@ -9,9 +9,7 @@ import json
 import traceback
 import datetime
 from collections import defaultdict
-from torchvision import transforms
 import time
-import warnings
 import numpy as np
 
 
