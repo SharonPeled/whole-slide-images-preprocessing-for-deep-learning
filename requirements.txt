@@ -1,6 +1,0 @@
-scikit-image==0.19.3
-scikit-learn==1.1.1
-numpy==1.23.0
-pandas==1.4.3
-matplotlib==3.5.2
-pyvips==2.2.1

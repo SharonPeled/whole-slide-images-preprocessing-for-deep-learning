@@ -9,8 +9,8 @@ general_configs:
 
 preprocessing_configs:
   # assuming TCGA folder structure, where each slide is in a separate dir and the dir is named after the slide_uuid
-  SLIDES_DIR: /home/sharonpe/work/microsatellite-instability-classification/data/slides  # input
-  PROCESSED_TILES_DIR: /home/sharonpe/work/microsatellite-instability-classification/data/processed_tiles_None  # output
+  SLIDES_DIR: null  # full path to input dir (slides)
+  PROCESSED_TILES_DIR: null  # full path to output dir (processed tiles)
   TILE_SIZE: 512  # should be divisible by downsample of reduced slide (usually 16, 32 or 64)
   PREPROCESS_RUN_NAME: '512'  # used to distinguish between different runs
   TILE_PROGRESS_LOG_FREQ: 1000  # reports progress from every process after x tiles
@@ -47,4 +47,4 @@ preprocessing_configs:
     Pen_not_filtered: 'blue'
 
 multiprocessing_configs:
-  MANIFEST_PATH: /path/to/your/data/slides/manifest_all_dx_slides_unlabeled_COAD_READ_UCEC_STAD_ESCA.tsv
+  MANIFEST_PATH: null
