@@ -7,6 +7,7 @@ from src.preprocessing.utils import generate_spatial_filter_mask, center_crop_fr
 from src.components.objects.Logger import Logger
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
+import traceback
 
 
 def load_slide(slide):
@@ -172,41 +173,46 @@ def save_processed_tile(tile, processed_tiles_dir):
 
 
 def generate_slide_color_grid(slide, attrs_to_colors_map, thumbnail_filename):
-    df = slide.summary_df.assign(**{a: False for a in attrs_to_colors_map.keys() if
-                                    a not in slide.summary_df.columns})  # adding missing attrs as false
-    grid = np.ones((slide.get('num_x_tiles'), slide.get('num_y_tiles')))
-    color_list = []
-    attrs = []
-    i = 1
-    for attr in attrs_to_colors_map.keys():
-        mask = generate_spatial_filter_mask(df, grid.shape, attr)
-        if mask.sum() == 0:
-            continue
-        color_list.append(attrs_to_colors_map[attr])
-        attrs.append(attr)
-        grid[mask == 1] = i
-        i += 1
-    cmap = plt.cm.colors.ListedColormap(color_list)
-    norm = colors.Normalize(vmin=1, vmax=len(color_list))
-    color_grid = cmap(norm(grid))
-    patches = [plt.plot([], [], marker="s", color=cmap(i / float(len(color_list))), ls="")[0]
-               for i in range(len(color_list))]
+    try:
+        df = slide.summary_df.assign(**{a: False for a in attrs_to_colors_map.keys() if
+                                        a not in slide.summary_df.columns})  # adding missing attrs as false
+        grid = np.ones((slide.get('num_x_tiles'), slide.get('num_y_tiles')))
+        color_list = []
+        attrs = []
+        i = 1
+        for attr in attrs_to_colors_map.keys():
+            mask = generate_spatial_filter_mask(df, grid.shape, attr)
+            if mask.sum() == 0:
+                continue
+            color_list.append(attrs_to_colors_map[attr])
+            attrs.append(attr)
+            grid[mask == 1] = i
+            i += 1
+        cmap = plt.cm.colors.ListedColormap(color_list)
+        norm = colors.Normalize(vmin=1, vmax=len(color_list))
+        color_grid = cmap(norm(grid))
+        patches = [plt.plot([], [], marker="s", color=cmap(i / float(len(color_list))), ls="")[0]
+                   for i in range(len(color_list))]
 
-    fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(10, 10))
+        fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(10, 10))
 
-    for ax in [ax1, ax2]:
-        ax.set_xticks([])
-        ax.set_yticks([])
+        for ax in [ax1, ax2]:
+            ax.set_xticks([])
+            ax.set_yticks([])
 
-    ax1.imshow(color_grid)
-    ax1.legend(patches, attrs, loc='lower right')
+        ax1.imshow(color_grid)
+        ax1.legend(patches, attrs, loc='lower right')
 
-    thumb = pyvips.Image.thumbnail(slide.path, 512)
-    ax2.imshow(thumb)
+        thumb = pyvips.Image.thumbnail(slide.path, 512)
+        ax2.imshow(thumb)
 
-    plt.subplots_adjust(wspace=0, hspace=0)
-    plt.tight_layout()
-    fig.savefig(os.path.join(os.path.dirname(slide.path), thumbnail_filename), bbox_inches='tight', pad_inches=0.5)
-    plt.close(fig)
-    Logger.log(f"""Thumbnail Saved.""", log_importance=1)
+        plt.subplots_adjust(wspace=0, hspace=0)
+        plt.tight_layout()
+        fig.savefig(os.path.join(os.path.dirname(slide.path), thumbnail_filename), bbox_inches='tight', pad_inches=0.5)
+        plt.close(fig)
+        Logger.log(f"""Thumbnail Saved.""", log_importance=1)
+    except Exception as e:
+        Logger.log(f"""Failed to save thumbnail {slide}""", log_importance=2)
+        Logger.log(f"""Exception {e}""", log_importance=2)
+        Logger.log(f"""Traceback {traceback.format_exc()}""", log_importance=2)
     return slide
