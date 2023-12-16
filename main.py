@@ -62,10 +62,6 @@ def main():
         bring_joined_log_file(Configs.get('SLIDES_DIR'), Configs.get('PROGRAM_LOG_FILE_ARGS')[0], args.bring_slide_logs)
     if args.bring_thumbnails:
         bring_files(Configs.get('SLIDES_DIR'), Configs.get('THUMBNAIL_FILENAME'), args.bring_thumbnails)
-    if args.bring_tumor_thumbnails:
-        bring_files(Configs.get('SLIDES_DIR'), Configs.get('TUMOR_THUMBNAIL_FILENAME'), args.bring_tumor_thumbnails)
-    if args.bring_semantic_seg_thumbnails:
-        bring_files(Configs.get('SLIDES_DIR'), Configs.get('SS_THUMBNAIL_FILENAME'), args.bring_semantic_seg_thumbnails)
 
 
 if __name__ == "__main__":
