@@ -20,7 +20,7 @@ def main():
     parser.add_argument('--num-tiling-subprocesses', type=int)
     parser.add_argument('--num-full-processes', type=int)
     parser.add_argument('--manifest_path', type=str)
-    parser.add_argument('--num_slides_per_full_process', type=int)
+    parser.add_argument('--num-slides-per-full-process', type=int)
     # for internal use only!
     parser.add_argument('--full-preprocess-batch', action='store_true')
     parser.add_argument('--full_batch_ind', type=int)
