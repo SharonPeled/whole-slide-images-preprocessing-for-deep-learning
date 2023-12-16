@@ -79,7 +79,7 @@ class Slide(Image):
                     break
         if self.img_r is None:
             Logger.log(f'Level not found: {load_level}.', log_importance=2)
-            Logger.log([self.img.get(attr) for attr in self.img.get_fields()], log_importance=2)
+            Logger.log([(attr, self.img.get(attr)) for attr in self.img.get_fields()], log_importance=2)
             raise Exception(f"Loading level {load_level} failed.")
         self.img_r.write_to_memory()
         height_r, width_r = self.img_r.height, self.img_r.width
