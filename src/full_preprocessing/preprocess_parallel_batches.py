@@ -22,7 +22,7 @@ def generate_slide_paths_from_manifest(manifest_path, slides_dir):
 
 def get_bash_str_preprocess(config_filepath, slide_ids, num_processes, full_batch_ind, delete_after_tiling):
     slides_str = ' '.join(slide_ids)
-    bash_str = f"conda run -n WSI_pp python -u main.py --config_filepath {config_filepath} --full-preprocess-batch --num-tiling-processes {num_processes} --slide_uuids {slides_str} --full_batch_ind {full_batch_ind} --delete-after-tiling delete_after_tiling>> {full_batch_ind}_preprocess_full_{get_time()}.txt 2>&1"
+    bash_str = f"conda run -n WSI_pp python -u main.py --config_filepath {config_filepath} --full-preprocess-batch --num-tiling-subprocesses {num_processes} --slide_uuids {slides_str} --full_batch_ind {full_batch_ind} --delete-after-tiling delete_after_tiling>> {full_batch_ind}_preprocess_full_{get_time()}.txt 2>&1"
     return bash_str
 
 

@@ -40,7 +40,7 @@ def delete_slides(slide_ids, slides_dir):
 def get_bash_str_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_filepath):
     slides_str = ' '.join(slide_ids)
     bash_str = f"""
-    conda run -n WSI_pp python -u main.py --preprocess --num-tiling-processes {num_subprocesses} --config_filepath {config_filepath} --slide_ids {slides_str} >> {full_batch_ind}_main_preprocess_{get_time()}.txt 2>&1
+    conda run -n WSI_pp python -u main.py --preprocess --num-tiling-subprocesses {num_subprocesses} --config_filepath {config_filepath} --slide_ids {slides_str} >> {full_batch_ind}_main_preprocess_{get_time()}.txt 2>&1
     """
     return bash_str
 
