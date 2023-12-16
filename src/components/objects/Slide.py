@@ -22,6 +22,7 @@ class Slide(Image):
         :param tiles_dir: directory for storing all tiles from all slides
         """
         super().__init__(path=path, slide_uuid=slide_uuid, device=device, **kwargs)
+        self.mag_attr, self.default_mag = mag_attr, default_mag
         if not mag_attr in pyvips.Image.new_from_file(path).get_fields():
             if default_mag is None:
                 self._log(f"Corrupt Slide: {mag_attr} is None and default mag is not set.", log_importance=2)
