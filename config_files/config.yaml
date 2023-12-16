@@ -46,6 +46,4 @@ preprocessing_configs:
     Pen: 'green'
     Pen_not_filtered: 'blue'
 
-multiprocessing_configs:
-  MANIFEST_PATH: null
 
