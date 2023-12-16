@@ -53,7 +53,9 @@ class Slide(Image):
     def from_img(cls, img_obj, new_img_attr):
         new_img_obj = cls(img_obj.path, img_obj.img, device=img_obj.device,
                           metadata_filename=img_obj.metadata_filename,
-                          summary_df_filename=img_obj.summary_df_filename)
+                          summary_df_filename=img_obj.summary_df_filename,
+                          mag_attr=img_obj.mag_attr,
+                          default_mag=img_obj.default_mag)
         new_img_obj.__dict__.update({k: v for k, v in img_obj.__dict__.items() if k != "img"})
         new_img_obj.img = new_img_attr
         return new_img_obj
@@ -126,7 +128,6 @@ class Slide(Image):
         return self.downsample
 
     def apply_pipeline(self, pipeline_list, ind, num_slides):
-        # In validation - need to suppress this if condition - as we want correction of processed slides
         if self.get('Done preprocessing', soft=True):
             self._log(f"""Slide already processed: {ind+1}/{num_slides}""", log_importance=1)
             return self
@@ -144,27 +145,6 @@ class Slide(Image):
                         np.random.shuffle(tiles_inds)
                         tiles_inds = tiles_inds[:int(self.sample)]  # sampling tiles
                         self._log(f"""Sampling {len(tiles_inds)} tissue tiles.""", log_importance=1)
-
-                    # validation - check if the slide already processed with the same tiles already saved
-                    # tile_size = self.get('tile_size')
-                    # slide_uuid = self.get('slide_uuid')
-                    # processed_tiles_dir = f'/home/sharonpe/work/microsatellite-instability-classification/data/processed_tiles_{tile_size}/{slide_uuid}'
-                    # from glob import glob
-                    # tile_path_list = pd.DataFrame({'tile_path': glob(f'{processed_tiles_dir}/*.jpg')})
-                    # tile_path_list['row'] = tile_path_list.tile_path.apply(
-                    #     lambda p: int(p.split('/')[-1].split('_')[0]))
-                    # tile_path_list['col'] = tile_path_list.tile_path.apply(
-                    #     lambda p: int(p.split('/')[-1].split('_')[1]))
-                    # processed_tiles_inds_set = set([(row['row'], row['col']) for i, row in tile_path_list.iterrows()])
-                    # tiles_inds_set = set([(x, y) for i, (x, y) in enumerate(tiles_inds)])
-                    # if tiles_inds_set.issubset(processed_tiles_inds_set) :
-                    #     self._log(f"""Slide processed and validated: {ind + 1}/{num_slides}""", log_importance=1)
-                    #     return
-                    # elif len(processed_tiles_inds_set) > 0:
-                    #     self._log(f"""Slide processed but failed in validation!!!: {slide_uuid}""", log_importance=1)
-                    # else:
-                    #     self._log(f"""Slide wasn't processed {slide_uuid}""", log_importance=1)
-
                     self._log(f"""Processing {len(tiles_inds)} tissue tiles of size {tile_size}.""", log_importance=1)
 
                     tile_inds_by_norm_res = defaultdict(lambda: [])
