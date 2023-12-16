@@ -49,7 +49,7 @@ def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_fi
     slide_ids = [slide_id.strip("'") for slide_id in slide_ids]
     Logger.log(f'Starting processing slides: {slide_ids}', log_importance=1)
     try:
-        download_slides(slides_dir=Configs.get('SLIDE_DIR'), slides_str=' '.join(slide_ids),
+        download_slides(slides_dir=Configs.get('SLIDES_DIR'), slides_str=' '.join(slide_ids),
                         full_batch_ind=full_batch_ind)
 
         bash_str = get_bash_str_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_filepath)
@@ -62,7 +62,7 @@ def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_fi
         # print(proc1.stderr.readlines())
         Logger.log(f'Finished {full_batch_ind} batch tiling process.', log_importance=1)
         if delete_after_tiling:
-            delete_slides(slide_ids, Configs.get('SLIDE_DIR'))
+            delete_slides(slide_ids, Configs.get('SLIDES_DIR'))
     except Exception as e:
         Logger.log(f"Main program received {e}", log_importance=2)
         Logger.log('Stopping subprocesses...', log_importance=2)
