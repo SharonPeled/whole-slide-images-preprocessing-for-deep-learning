@@ -15,16 +15,20 @@ import numpy as np
 
 class Slide(Image):
     def __init__(self, path, slide_uuid=None, load_metadata=True, device=None, metadata_filename=None,
-                 summary_df_filename=None, sample=None, **kwargs):
+                 summary_df_filename=None, sample=None, mag_attr=None, default_mag=None, **kwargs):
         """
         :param slide_uuid:
         :param path: if slide_uuid=None then path directory name must be uuid of the slide, as in the gdc-client format
         :param tiles_dir: directory for storing all tiles from all slides
         """
         super().__init__(path=path, slide_uuid=slide_uuid, device=device, **kwargs)
-        if not 'openslide.objective-power' in pyvips.Image.new_from_file(path).get_fields():
-            self._log(f"Corrupt Slide {self.img}", log_importance=2)
-            raise Exception(f"Corrupt Slide {self.path}")
+        if not mag_attr in pyvips.Image.new_from_file(path).get_fields():
+            if default_mag is None:
+                self._log(f"Corrupt Slide: {mag_attr} is None and default mag is not set.", log_importance=2)
+                raise Exception(f"Corrupt Slide {self.path}")
+            else:
+                self.set(mag_attr, default_mag)
+                self._log(f"{mag_attr} is Null, using default {default_mag}", log_importance=2)
         if slide_uuid is None:
             self.set('slide_uuid', self._get_uuid())
         self.metadata_filename = metadata_filename

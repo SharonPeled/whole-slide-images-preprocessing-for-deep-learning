@@ -7,7 +7,8 @@ import pandas as pd
 
 
 class SlideDataset(Logger):
-    def __init__(self, slides_dir, slide_log_file_args, device, sample, load_metadata=True, slide_uuids=None):
+    def __init__(self, slides_dir, slide_log_file_args, device, sample, load_metadata=True, slide_uuids=None,
+                 mag_attr=None, default_mag=None):
         self.sample = sample
         self.device = device
         self.slides_dir = slides_dir
@@ -28,11 +29,13 @@ class SlideDataset(Logger):
         self.slides = None
         self.load_metadata = load_metadata
         self.slide_log_file_args = slide_log_file_args
+        self.mag_attr, self.default_mag = mag_attr, default_mag
         self._log(f'Created with {len(self.slide_paths_list)} slides.', log_importance=1)
 
     def apply_pipeline(self, pipeline, process_manager, metadata_filename, summary_df_filename):
         self._log(f'Applying pipeline on {len(self.slide_paths_list)} slides.', log_importance=1)
-        param_generator = ((path, pipeline, ind, metadata_filename, summary_df_filename)
+        param_generator = ((path, pipeline, ind, metadata_filename, summary_df_filename,
+                            self.mag_attr, self.default_mag)
                            for ind, path in enumerate(self.slide_paths_list))
         log_file_args_generator = ((os.path.join(os.path.dirname(slide_path), f'{i}_{self.slide_log_file_args[0]}'),
                                     self.slide_log_file_args[1])
@@ -41,10 +44,10 @@ class SlideDataset(Logger):
                                                             log_file_args_generator)
         self._log(f'Finished pipeline on {len(self.slide_paths_list)} slides.', log_importance=1)
 
-    def _apply_on_slide(self, path, pipeline, ind, metadata_filename, summary_df_filename):
+    def _apply_on_slide(self, path, pipeline, ind, metadata_filename, summary_df_filename, mag_attr, default_mag):
         beg = time.time()
         slide = Slide(path, load_metadata=self.load_metadata, device=self.device, metadata_filename=metadata_filename,
-                      summary_df_filename=summary_df_filename, sample=self.sample)
+                      summary_df_filename=summary_df_filename, sample=self.sample, mag_attr=mag_attr, default_mag=default_mag)
         slide.apply_pipeline(pipeline, ind, len(self.slide_paths_list))
         self.log(f"[Slide ({ind+1}/{len(self.slide_paths_list)})] Total Processing time: {int(time.time() - beg)} seconds.",
                  log_importance=2)

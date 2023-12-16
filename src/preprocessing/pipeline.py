@@ -20,7 +20,9 @@ def execute_preprocessing_pipeline(with_tiling, num_processes, slide_uuids):
                                  device=Configs.get('PREPROCESSING_DEVICE'),
                                  slide_log_file_args=Configs.get('PROGRAM_LOG_FILE_ARGS'),
                                  sample=Configs.get('SAMPLE_PROCESSED_TILES'),
-                                 slide_uuids=slide_uuids)
+                                 slide_uuids=slide_uuids,
+                                 mag_attr=Configs.get('MAG_ATTR'),
+                                 default_mag=Configs.get('DEFAULT_MAG'))
 
     pipeline_list = [
         ('slide', Pipeline([

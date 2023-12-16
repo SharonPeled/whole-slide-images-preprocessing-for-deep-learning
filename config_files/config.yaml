@@ -20,6 +20,7 @@ preprocessing_configs:
   REDUCED_LEVEL_TO_MEMORY: [3, 2]  # levels of .svs downsamled thumbnail, attempting to load according to order
   TARGET_MAG_POWER: 20
   MAG_ATTR: 'openslide.objective-power'
+  DEFAULT_MAG: null  # assumes this MAG when the slide's MAT_ATTR is null
   TILE_NON_TISSUE_THRESHOLD: 0.5  # tiles with more non-tissue fraction than threshold are filtered
   OTSU_FILTER:  # parameters for otsu background filtering
     reduced_img_factor: 0.8
