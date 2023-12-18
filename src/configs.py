@@ -17,10 +17,10 @@ class ConfigsSingletonClass:
         self.add_computed_configs()
 
     def add_computed_configs(self):
-        PREPROCESS_RUN_NAME = self.config_dict['PREPROCESS_RUN_NAME']
-        self.config_dict['METADATA_JSON_FILENAME'] = f'metadata_{PREPROCESS_RUN_NAME}.json'
-        self.config_dict['SUMMARY_DF_FILENAME'] = f'summary_df_{PREPROCESS_RUN_NAME}.csv'
-        self.config_dict['THUMBNAIL_FILENAME'] = f'thumbnail_{PREPROCESS_RUN_NAME}.png'
+        preprocess_run_name = self.config_dict['PREPROCESS_RUN_NAME']
+        self.config_dict['METADATA_JSON_FILENAME'] = f'metadata_{preprocess_run_name}.json'
+        self.config_dict['SUMMARY_DF_FILENAME'] = f'summary_df_{preprocess_run_name}.csv'
+        self.config_dict['THUMBNAIL_FILENAME'] = f'thumbnail_{preprocess_run_name}.png'
         if self.config_dict['PEN_FILTER']['color_palette'] is None:
             self.config_dict['PEN_FILTER']['color_palette'] = get_pen_color_palette()
 
