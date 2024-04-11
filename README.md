@@ -14,11 +14,11 @@ This repository is dedicated to the preprocessing of Whole Slide Images (WSIs) f
 - **Thumbnail Generation for Validation**: Enables the generation of a thumbnail heatmap with all filters applied, providing a fast and easy method to validate the tiling process. This feature is crucial for debugging and ensures that the extraction process meets the expected requirements before executing it over all slides. 
 
 Examples: <br>
-<center>
-<img src="images/thumbnail2.png" height="300">
-<img src="images/thumbnail1.png" height="300">
+<div align="center">
+    <img src="images/thumbnail2.png" style="height: 300px; display: inline-block;">
+    <img src="images/thumbnail1.png" style="height: 300px; display: inline-block;">
+</div>
 
-</center>
 
 
 ## Command-Line Options
