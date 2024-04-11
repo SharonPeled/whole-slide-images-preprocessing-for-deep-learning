@@ -15,8 +15,8 @@ This repository is dedicated to the preprocessing of Whole Slide Images (WSIs) f
 
 Examples: <br>
 <div align="center">
-    <img src="images/thumbnail2.png" style="height: 450px; display: inline-block;">
-    <img src="images/thumbnail1.png" style="height: 450px; display: inline-block;">
+    <img src="images/thumbnail2.png" style="height: 400px; display: inline-block;">
+    <img src="images/thumbnail1.png" style="height: 400px; display: inline-block;">
 </div>
 
 
