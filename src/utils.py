@@ -23,6 +23,7 @@ def set_random_seed(seed):
     np.random.seed(seed)
     torch.manual_seed(seed)
 
+
 def bring_files(folder_in, file_format, folder_out):
     if not os.path.exists(folder_out):
         os.makedirs(folder_out)
