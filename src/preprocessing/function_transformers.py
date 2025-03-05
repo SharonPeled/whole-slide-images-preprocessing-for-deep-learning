@@ -110,8 +110,9 @@ def filter_non_tissue_tiles(slide, non_tissue_threshold, otsu_filter, black_filt
     # Few individual pen tiles are unlikely to be present. In case a few pen tiles is found it may be
     # a colorful tissue misinterpreted as a pen tile.
     # therefore, if the number of pen tiles is too low, it may be best to not filter them at all.
-    if (num_filtered_per_filter[-1] / (tile_pen_fracs.size - sum(num_filtered_per_filter[:-1]))) < pen_filter['min_pen_tiles']:
-        filters_array_list = [tile_background_fracs, tile_black_fracs]
+    if pen_filter is not None:
+        if (num_filtered_per_filter[-1] / (tile_pen_fracs.size - sum(num_filtered_per_filter[:-1]))) < pen_filter['min_pen_tiles']:
+            filters_array_list = [tile_background_fracs, tile_black_fracs]
     tile_non_tissue_fracs_sum = sum(filters_array_list)
     tile_non_tissue_fracs_max = np.maximum.reduce(filters_array_list)
     filtered_tile_inds = np.argwhere(tile_non_tissue_fracs_sum > non_tissue_threshold)
