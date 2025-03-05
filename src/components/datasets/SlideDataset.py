@@ -12,7 +12,7 @@ class SlideDataset(Logger):
         self.sample = sample
         self.device = device
         self.slides_dir = slides_dir
-        self.slide_paths_list = list(sorted(glob(f"{slides_dir}/**/*.svs", recursive=True)))
+        self.slide_paths_list = list(sorted(glob(f"{slides_dir}/**/*.svs", recursive=True))) + list(sorted(glob(f"{slides_dir}/**/*.tif", recursive=True)))
         self._log(f'Found {len(self.slide_paths_list)} slides in {slides_dir}', log_importance=1)
         if slide_uuids is not None:
             slide_uuids = [slide_id.strip("'") for slide_id in slide_uuids]
