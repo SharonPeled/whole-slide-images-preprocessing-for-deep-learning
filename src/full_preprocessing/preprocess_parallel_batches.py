@@ -10,7 +10,7 @@ from src.components.objects.Logger import Logger
 
 def generate_slide_paths_from_manifest(manifest_path, slides_dir):
     slide_paths = []
-    df_m = pd.read_csv(manifest_path, sep='\t')
+    df_m = pd.read_csv(manifest_path, sep='\t' if not manifest_path.endswith('.csv') else ',')
     for i, row in df_m.iterrows():
         slide_uuid = row['id']
         filename = row['filename']
