@@ -125,10 +125,12 @@ def filter_non_tissue_tiles(slide, non_tissue_threshold, otsu_filter, black_filt
                                        tile_pen_fracs[filtered_tile_array_inds]]
     slide.add_attribute_summary_df(bg_tile_inds, otsu_filter['attr_name'],
                                    True, False, is_tissue_filter=True)
-    slide.add_attribute_summary_df(black_tile_inds, black_filter['attr_name'],
-                                   True, False, is_tissue_filter=True)
-    slide.add_attribute_summary_df(pen_tile_inds, pen_filter['attr_name'],
-                                   True, False, is_tissue_filter=True)
+    if black_filter is not None:
+        slide.add_attribute_summary_df(black_tile_inds, black_filter['attr_name'],
+                                       True, False, is_tissue_filter=True)
+    if pen_filter is not None:
+        slide.add_attribute_summary_df(pen_tile_inds, pen_filter['attr_name'],
+                                       True, False, is_tissue_filter=True)
     return slide
 
 
