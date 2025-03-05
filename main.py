@@ -20,9 +20,9 @@ def main():
     parser.add_argument('--num-tiling-subprocesses', type=int)
     parser.add_argument('--num-full-processes', type=int)
     # requires AWS camelyon toolkit
-    parser.add_argument('--manifest_path', type=str, const='Camelyon16_manifest_updated.csv')  # for camelyon, simply put the slide ids in a csv
+    parser.add_argument('--manifest_path', type=str, default='Camelyon16_manifest_updated.csv')  # for camelyon, simply put the slide ids in a csv
     parser.add_argument('--num-slides-per-full-process', type=int)
-    parser.add_argument('--Camelyon', const=True)
+    parser.add_argument('--Camelyon', default=True)
     # for internal use only!
     parser.add_argument('--full-preprocess-batch', action='store_true')
     parser.add_argument('--full_batch_ind', type=int)
