@@ -101,8 +101,8 @@ def filter_pen_reduced_image(slide, color_palette, **kwargs):
 
 def filter_non_tissue_tiles(slide, non_tissue_threshold, otsu_filter, black_filter, pen_filter):
     tile_background_fracs = filter_otsu_reduced_image(slide, **otsu_filter)
-    tile_black_fracs = filter_black_reduced_image(slide, **black_filter)
-    tile_pen_fracs = filter_pen_reduced_image(slide, **pen_filter)
+    tile_black_fracs = filter_black_reduced_image(slide, **black_filter) if black_filter is not None else []
+    tile_pen_fracs = filter_pen_reduced_image(slide, **pen_filter) if pen_filter is not None else []
     filters_array_list = [tile_background_fracs, tile_black_fracs, tile_pen_fracs]
     num_filtered_per_filter = list(map(lambda f: f.sum(), filters_array_list))
     # empirical observation: it is commonly found that pen tiles tend to appear in large
