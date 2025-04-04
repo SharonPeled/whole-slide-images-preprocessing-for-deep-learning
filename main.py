@@ -32,6 +32,9 @@ def main():
 
     Configs.deploy_yaml_file(args.config_filepath)
 
+    print(args)
+    print(Configs)
+
     set_global_configs(verbose=Configs.get('VERBOSE'),
                        log_file_args=Configs.get('PROGRAM_LOG_FILE_ARGS'),
                        log_importance=Configs.get('LOG_IMPORTANCE'),
