@@ -119,6 +119,9 @@ def filter_non_tissue_tiles(slide, non_tissue_threshold, otsu_filter, black_filt
     tile_non_tissue_fracs_sum = sum(filters_array_list)
     tile_non_tissue_fracs_max = np.maximum.reduce(filters_array_list)
     filtered_tile_inds = np.argwhere(tile_non_tissue_fracs_sum > non_tissue_threshold)
+    print(tile_background_fracs)
+    print(tile_non_tissue_fracs_sum)
+    print((tile_background_fracs > non_tissue_threshold).sum(), (tile_non_tissue_fracs_sum > non_tissue_threshold).sum())
     # for coloring - splitting filtered tiles into the most significant filter
     filtered_tile_array_inds = tuple(np.array(filtered_tile_inds).T)
     bg_tile_inds = filtered_tile_inds[tile_non_tissue_fracs_max[filtered_tile_array_inds] ==
