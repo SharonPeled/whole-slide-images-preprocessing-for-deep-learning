@@ -31,7 +31,9 @@ def main():
     args = parser.parse_args()
 
     Configs.deploy_yaml_file(args.config_filepath)
+    # arguments that may need to further propogate to subprocesses
     Configs.set('Camelyon', args.Camelyon)
+    Configs.set('aws_path', args.aws_path)
 
     set_global_configs(verbose=Configs.get('VERBOSE'),
                        log_file_args=Configs.get('PROGRAM_LOG_FILE_ARGS'),
