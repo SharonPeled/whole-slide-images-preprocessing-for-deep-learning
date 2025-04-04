@@ -42,6 +42,8 @@ def download_slides_camelyon(slides_dir, slides_str, full_batch_ind):
 
 
 def download_slides(slides_dir, slides_str, full_batch_ind):
+    print('download_slides', Configs.get('Camelyon'))
+
     if Configs.get('Camelyon'):
         return download_slides_camelyon(slides_dir, slides_str, full_batch_ind)
     try:
@@ -77,7 +79,7 @@ def delete_slides(slide_ids, slides_dir):
 def get_bash_str_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_filepath):
     slides_str = ' '.join(slide_ids)
     bash_str = f"""
-    conda run -n WSI_pp python -u main.py --preprocess --num-tiling-subprocesses {num_subprocesses} --config_filepath {config_filepath} --slide_uuids {slides_str} >> batch_{full_batch_ind}_preprocess_{get_time()}.txt 2>&1
+    conda run -n WSI_pp python -u main.py --preprocess --Camelyon {Configs.get('Camelyon')} --num-tiling-subprocesses {num_subprocesses} --config_filepath {config_filepath} --slide_uuids {slides_str} >> batch_{full_batch_ind}_preprocess_{get_time()}.txt 2>&1
     """
     return bash_str
 
