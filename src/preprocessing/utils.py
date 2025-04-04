@@ -41,6 +41,9 @@ def generate_spatial_filter_mask(df, shape, attr):
     """
     mask = np.zeros(shape)
     tuple_inds = df[(df[attr]==True)|(df[attr]==1)].index
+
+    print(attr, len(tuple_inds), tuple_inds)
+
     rows_inds = [t[0] for t in tuple_inds]
     cols_inds = [t[1] for t in tuple_inds]
     mask[rows_inds, cols_inds] = 1
