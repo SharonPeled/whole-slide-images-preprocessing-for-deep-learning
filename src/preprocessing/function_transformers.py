@@ -78,10 +78,6 @@ def filter_otsu_reduced_image(slide, color_palette, reduced_img_factor, **kwargs
     tile_foreground_pixel_sum = conv2d_to_device(mask, tile_size_r, tile_size_r, slide.device)
     tile_background_fracs = 1 - (tile_foreground_pixel_sum / (tile_size_r ** 2))
     tile_background_fracs *= reduced_img_factor
-
-    bins = np.linspace(0, 1, 11)
-    print(np.histogram(tile_background_fracs,  bins=bins))
-
     return tile_background_fracs
 
 
@@ -111,9 +107,6 @@ def filter_non_tissue_tiles(slide, non_tissue_threshold, otsu_filter, black_filt
     tile_pen_fracs = filter_pen_reduced_image(slide, **pen_filter) if pen_filter is not None else np.zeros(tile_background_fracs.shape)
     filters_array_list = [tile_background_fracs, tile_black_fracs, tile_pen_fracs]
     num_filtered_per_filter = list(map(lambda f: (f>non_tissue_threshold).sum(), filters_array_list))
-
-
-    print(tile_background_fracs.shape, len(tile_background_fracs), num_filtered_per_filter)
     # empirical observation: it is commonly found that pen tiles tend to appear in large
     # amounts (when pen circles the tissue).
     # Few individual pen tiles are unlikely to be present. In case a few pen tiles is found it may be
@@ -125,13 +118,6 @@ def filter_non_tissue_tiles(slide, non_tissue_threshold, otsu_filter, black_filt
     tile_non_tissue_fracs_sum = sum(filters_array_list)
     tile_non_tissue_fracs_max = np.maximum.reduce(filters_array_list)
     filtered_tile_inds = np.argwhere(tile_non_tissue_fracs_sum > non_tissue_threshold)
-
-    print(non_tissue_threshold)
-
-    bins = np.linspace(0, 1, 11)
-    print(np.histogram(tile_background_fracs, bins=bins))
-    print(np.histogram(tile_non_tissue_fracs_sum, bins=bins))
-    print((tile_background_fracs > non_tissue_threshold).sum(), (tile_non_tissue_fracs_sum > non_tissue_threshold).sum())
     # for coloring - splitting filtered tiles into the most significant filter
     filtered_tile_array_inds = tuple(np.array(filtered_tile_inds).T)
     bg_tile_inds = filtered_tile_inds[tile_non_tissue_fracs_max[filtered_tile_array_inds] ==
@@ -202,6 +188,7 @@ def generate_slide_color_grid(slide, attrs_to_colors_map, thumbnail_filename):
         for attr in attrs_to_colors_map.keys():
             mask = generate_spatial_filter_mask(df, grid.shape, attr)
             if mask.sum() == 0:
+                print('skipped mask', attrs)
                 continue
             color_list.append(attrs_to_colors_map[attr])
             attrs.append(attr)
