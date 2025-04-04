@@ -80,7 +80,7 @@ def filter_otsu_reduced_image(slide, color_palette, reduced_img_factor, **kwargs
 
     print(tile_size_r, img_r_bw_np.shape)
     bins=np.linspace(0, 1, 11)
-    print(np.histogram(tile_background_fracs), bins=bins)
+    print(np.histogram(tile_background_fracs, bins=bins))
 
     tile_background_fracs *= reduced_img_factor
     return tile_background_fracs
