@@ -9,27 +9,14 @@ from src.components.objects.Logger import Logger
 def download_slides_camelyon(slides_dir, slides_str, full_batch_ind):
     Logger.log('Start Downloading Camelyon..', log_importance=1)
 
-    os.makedirs(slides_dir, exist_ok=True)
-    bash_str = f"""cd {slides_dir}"""
-    proc = subprocess.Popen([bash_str], stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            text=True,
-                            shell=True)
-    Logger.log(bash_str, log_importance=1)
-
-    aws_camelyon_download_cmd = f"""{Configs.get('aws_path')} s3 cp s3://camelyon-dataset/CAMELYON16/background_tissue/{{slide_filename}} {{slide_id}} --no-sign-request >> {full_batch_ind}_download_log_{{slide_id}}_{get_time()}.txt 2>&1"""
+    aws_camelyon_download_cmd = f"""{Configs.get('aws_path')} s3 cp s3://camelyon-dataset/CAMELYON16/background_tissue/{{slide_filename}} {{slide_dir_path}}/{{slide_filename}} --no-sign-request >> {full_batch_ind}_download_log_{{slide_id}}_{get_time()}.txt 2>&1"""
     slide_ids = slides_str.split(' ')
     for slide_id in slide_ids:
         try:
-            bash_str = f"""mkdir {slide_id}"""
-            proc = subprocess.Popen([bash_str], stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE,
-                                    text=True,
-                                    shell=True)
-            Logger.log(bash_str, log_importance=1)
+            slide_dir_path = os.path.join(slides_dir, slide_id)
+            os.mkdir(slide_dir_path)
 
-
-            download_slide_bash_str = aws_camelyon_download_cmd.format(slide_id=slide_id, slide_filename=slide_id+'.tif')
+            download_slide_bash_str = aws_camelyon_download_cmd.format(slide_filename=slide_id+'.tif', slide_dir_path=slide_dir_path, slide_id=slide_id)
             proc = subprocess.Popen([download_slide_bash_str], stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
                                     text=True,
