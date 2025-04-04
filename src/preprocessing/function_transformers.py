@@ -126,6 +126,8 @@ def filter_non_tissue_tiles(slide, non_tissue_threshold, otsu_filter, black_filt
     tile_non_tissue_fracs_max = np.maximum.reduce(filters_array_list)
     filtered_tile_inds = np.argwhere(tile_non_tissue_fracs_sum > non_tissue_threshold)
 
+    print(non_tissue_threshold)
+
     bins = np.linspace(0, 1, 11)
     print(np.histogram(tile_background_fracs, bins=bins))
     print(np.histogram(tile_non_tissue_fracs_sum, bins=bins))
