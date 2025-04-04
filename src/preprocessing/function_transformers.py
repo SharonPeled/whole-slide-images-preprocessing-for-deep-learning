@@ -187,8 +187,10 @@ def generate_slide_color_grid(slide, attrs_to_colors_map, thumbnail_filename):
         i = 1
         for attr in attrs_to_colors_map.keys():
             mask = generate_spatial_filter_mask(df, grid.shape, attr)
+
+            print(attrs, mask.sum())
+
             if mask.sum() == 0:
-                print('skipped mask', attrs)
                 continue
             color_list.append(attrs_to_colors_map[attr])
             attrs.append(attr)
