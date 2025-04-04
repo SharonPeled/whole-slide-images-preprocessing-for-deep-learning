@@ -72,7 +72,9 @@ def filter_otsu_reduced_image(slide, color_palette, reduced_img_factor, **kwargs
     slide.set('otsu_val', otsu_val)
     tile_size_r = slide.get('tile_size_r')
     img_r_bw_np = img_r_bw.numpy()
-    mask = (img_r_bw_np < otsu_val) | ((img_r_bw_np < otsu_val*color_palette['otsu_val_factor']) & (s > color_palette['s']))
+    mask = (img_r_bw_np < otsu_val)
+    if color_palette is not None:
+        mask = mask | ((img_r_bw_np < otsu_val*color_palette['otsu_val_factor']) & (s > color_palette['s']))
     tile_foreground_pixel_sum = conv2d_to_device(mask, tile_size_r, tile_size_r, slide.device)
     tile_background_fracs = 1 - (tile_foreground_pixel_sum / (tile_size_r ** 2))
     tile_background_fracs *= reduced_img_factor
