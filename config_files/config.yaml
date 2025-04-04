@@ -41,7 +41,7 @@ preprocessing_configs:
     color_palette: null  # loads params using get_pen_color_palette()
   TISSUE_ATTR: 'Tissue'
   ATTRS_TO_COLOR_MAP:
-    TISSUE_ATTR: 'pink'
+    Tissue: 'pink'  # need to be same as TISSUE_ATTR
     Background: 'white'
     Black: 'grey'
     Pen: 'green'

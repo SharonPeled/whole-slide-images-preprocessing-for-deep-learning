@@ -115,7 +115,6 @@ class Slide(Image):
         self.set('tissue_attr', tissue_attr)
 
     def add_attribute_summary_df(self, tile_indexes, attr_name, val, other_val, is_tissue_filter):
-        print(attr_name)
         self.summary_df.loc[tile_indexes, attr_name] = val
         self.summary_df[attr_name] = self.summary_df[attr_name].fillna(other_val)
         if is_tissue_filter:
