@@ -8,12 +8,15 @@ from src.components.objects.Logger import Logger
 
 def download_slides_camelyon(slides_dir, slides_str, full_batch_ind):
     Logger.log('Start Downloading Camelyon..', log_importance=1)
+
     os.makedirs(slides_dir, exist_ok=True)
     bash_str = f"""cd {slides_dir}"""
     proc = subprocess.Popen([bash_str], stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
                             text=True,
                             shell=True)
+    Logger.log(bash_str, log_importance=1)
+
     aws_camelyon_download_cmd = f"""{Configs.get('aws_path')} s3 cp s3://camelyon-dataset/CAMELYON16/background_tissue/{{slide_filename}} {{slide_id}} --no-sign-request >> {full_batch_ind}_download_log_{{slide_id}}_{get_time()}.txt 2>&1"""
     slide_ids = slides_str.split(' ')
     for slide_id in slide_ids:
@@ -23,13 +26,16 @@ def download_slides_camelyon(slides_dir, slides_str, full_batch_ind):
                                     stderr=subprocess.PIPE,
                                     text=True,
                                     shell=True)
+            Logger.log(bash_str, log_importance=1)
+
 
             download_slide_bash_str = aws_camelyon_download_cmd.format(slide_id=slide_id, slide_filename=slide_id+'.tif')
             proc = subprocess.Popen([download_slide_bash_str], stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
                                     text=True,
                                     shell=True)
-            Logger.log(bash_str, log_importance=1)
+            Logger.log(download_slide_bash_str, log_importance=1)
+
         except Exception as e:
             Logger.log(f"Main program received {e}", log_importance=2)
             Logger.log(f"Download failed with slide: {slide_id}", log_importance=2)
@@ -42,8 +48,6 @@ def download_slides_camelyon(slides_dir, slides_str, full_batch_ind):
 
 
 def download_slides(slides_dir, slides_str, full_batch_ind):
-    print('download_slides', Configs.get('Camelyon'))
-
     if Configs.get('Camelyon'):
         return download_slides_camelyon(slides_dir, slides_str, full_batch_ind)
     try:
