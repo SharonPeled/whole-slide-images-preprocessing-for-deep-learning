@@ -9,7 +9,7 @@ from src.components.objects.Logger import Logger
 def download_slides_camelyon(slides_dir, slides_str, full_batch_ind):
     Logger.log('Start Downloading Camelyon..', log_importance=1)
 
-    aws_camelyon_download_cmd = f"""{Configs.get('aws_path')} s3 cp s3://camelyon-dataset/CAMELYON16/background_tissue/{{slide_filename}} {{slide_dir_path}}/{{slide_filename}} --no-sign-request >> {full_batch_ind}_download_log_{{slide_id}}_{get_time()}.txt 2>&1"""
+    aws_camelyon_download_cmd = f"""{Configs.get('aws_path')} s3 cp s3://camelyon-dataset/CAMELYON16/images/{{slide_filename}} {{slide_dir_path}}/{{slide_filename}} --no-sign-request >> {full_batch_ind}_download_log_{{slide_id}}_{get_time()}.txt 2>&1"""
     slide_ids = slides_str.split(' ')
     for slide_id in slide_ids:
         try:
