@@ -33,7 +33,7 @@ def main():
     Configs.deploy_yaml_file(args.config_filepath)
 
     print(args)
-    print(Configs)
+    print(Configs.config_dict)
 
     set_global_configs(verbose=Configs.get('VERBOSE'),
                        log_file_args=Configs.get('PROGRAM_LOG_FILE_ARGS'),
