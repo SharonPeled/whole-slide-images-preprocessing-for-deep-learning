@@ -178,6 +178,7 @@ def save_processed_tile(tile, processed_tiles_dir):
 
 
 def generate_slide_color_grid(slide, attrs_to_colors_map, thumbnail_filename):
+    print('test!!!')
     try:
         df = slide.summary_df.assign(**{a: False for a in attrs_to_colors_map.keys() if
                                         a not in slide.summary_df.columns})  # adding missing attrs as false
@@ -185,6 +186,7 @@ def generate_slide_color_grid(slide, attrs_to_colors_map, thumbnail_filename):
         color_list = []
         attrs = []
         i = 1
+        print(attrs_to_colors_map)
         for attr in attrs_to_colors_map.keys():
             mask = generate_spatial_filter_mask(df, grid.shape, attr)
 
