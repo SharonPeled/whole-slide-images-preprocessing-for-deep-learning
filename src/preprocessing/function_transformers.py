@@ -189,7 +189,7 @@ def generate_slide_color_grid(slide, attrs_to_colors_map, thumbnail_filename):
         print(attrs_to_colors_map)
         print(df)
         print(df.dtypes)
-
+        print(df.sum(axis=1))
         for attr in attrs_to_colors_map.keys():
             mask = generate_spatial_filter_mask(df, grid.shape, attr)
 
