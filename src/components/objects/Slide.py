@@ -80,9 +80,8 @@ class Slide(Image):
                 Logger.log(f'Level not found: {load_level}.', log_importance=2)
                 Logger.log([(attr, self.img.get(attr)) for attr in self.img.get_fields()], log_importance=2)
 
-                downsample_f = 2 ** (load_level[0] + 2)  # because of shrinking, adding an additional factor to downsample
-                Logger.log(f'Using manual downsampling: {downsample_f / 4.0}', log_importance=2)
-
+                downsample_f = 2 ** (load_level[0] + 1)  # because of shrinking, adding an additional factor to downsample
+                Logger.log(f'Using manual downsampling: {downsample_f / 2.0}', log_importance=2)
                 self.img_r = pyvips.Image.new_from_file(self.path, access='sequential').extract_band(0, n=3).shrink(downsample_f, downsample_f)
                 self.img_r_level = int(load_level[0])
                 # height_r, width_r = self.img_r.height, self.img_r.width
