@@ -15,7 +15,13 @@ def load_slide(slide):
     return slide
 
 
-def resize(slide, target_mag_power, mag_attr):
+def resize(slide, target_mag_power, mag_attr, tile_size):
+    y_margins, x_margins, cropped_width, cropped_height, y_tiles, x_tiles = center_crop_from_tile_size(
+        slide.height,
+        slide.width,
+        tile_size)
+    slide = slide.crop(y_margins, x_margins, cropped_width, cropped_height)
+
     slide_mag_power = int(slide.get(mag_attr))
     scale = target_mag_power / slide_mag_power
     if scale > 1:
