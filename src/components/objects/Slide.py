@@ -84,6 +84,8 @@ class Slide(Image):
                 Logger.log(f'Using manual downsampling: {downsample_f / 2.0}', log_importance=2)
                 self.img_r = pyvips.Image.new_from_file(self.path, access='sequential').extract_band(0, n=3).shrink(downsample_f, downsample_f)
                 self.img_r_level = int(load_level[0])
+
+
                 # height_r, width_r = self.img_r.height, self.img_r.width
                 # self.log(f"""Reduced image size after shrinking: {width_r, height_r}.""", log_importance=1)
                 # target_h = 2 ** int(math.ceil(math.log2(height_r)))
@@ -103,7 +105,7 @@ class Slide(Image):
         if int(self.width / width_r) != int(self.height / height_r):
             raise Exception(f"""The lower level of slide is downsampled inconsistently across axis.
             Width ratio: {width_ratio}, Height ratio: {height_ratio}""")
-        self.downsample = int(self.width / width_r)
+        self.downsample = round(self.width / width_r)
         self.log(f"""Reduced image downsampled: {self.downsample}.""", log_importance=1)
 
     def unload_level_from_memory(self):
