@@ -84,6 +84,10 @@ class Slide(Image):
 
                 self.img_r = pyvips.Image.new_from_file(self.path).extract_band(0, n=3).resize(1.0 / downsample_f)
                 self.img_r_level = int(load_level[0])
+
+
+                print('Finished downsampling...')
+
         if self.img_r is None:
             Logger.log(f'Level not found: {load_level} and manual resizing failed.', log_importance=2)
             raise Exception(f"Loading level {load_level} failed.")
