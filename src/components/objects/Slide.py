@@ -11,6 +11,7 @@ import datetime
 from collections import defaultdict
 import time
 import numpy as np
+import math
 
 
 class Slide(Image):
@@ -80,10 +81,21 @@ class Slide(Image):
                 Logger.log([(attr, self.img.get(attr)) for attr in self.img.get_fields()], log_importance=2)
 
                 downsample_f = 2 ** (load_level[0] + 1)  # because of shrinking, adding an additional factor to downsample
-                Logger.log(f'Using manual downsampling: {downsample_f}', log_importance=2)
+                Logger.log(f'Using manual downsampling: {downsample_f / 2.0}', log_importance=2)
 
                 self.img_r = pyvips.Image.new_from_file(self.path, access='sequential').extract_band(0, n=3).shrink(downsample_f, downsample_f)
                 self.img_r_level = int(load_level[0])
+
+                height_r, width_r = self.img_r.height, self.img_r.width
+                self.log(f"""Reduced image size after shrinking: {width_r, height_r}.""", log_importance=1)
+                target_h = 2 ** int(math.ceil(math.log2(height_r)))
+                target_w = 2 ** int(math.ceil(math.log2(width_r)))
+                self.log(f"""Padding reduced image: {target_w, target_h}.""", log_importance=1)
+                white_bg = pyvips.Image.black(w_target, h_target).new_from_image([255, 255, 255])
+                padded_img = white_bg.insert(self.img_r, 0, 0)
+                self.img_r = padded_img
+
+
         if self.img_r is None:
             Logger.log(f'Level not found: {load_level} and manual resizing failed.', log_importance=2)
             raise Exception(f"Loading level {load_level} failed.")
