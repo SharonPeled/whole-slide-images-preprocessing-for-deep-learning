@@ -90,6 +90,9 @@ class Slide(Image):
         self.img_r.write_to_memory()
         height_r, width_r = self.img_r.height, self.img_r.width
         width_ratio, height_ratio = int(self.width / width_r), int(self.height / height_r)
+        self.log(f"""Original image size: {self.width, self.height}.""", log_importance=1)
+        self.log(f"""Reduced image size: {self.width_r, self.height_r}.""", log_importance=1)
+        self.log(f"""Reduced image downsampled: {self.downsample}.""", log_importance=1)
         if int(self.width / width_r) != int(self.height / height_r):
             raise Exception(f"""The lower level of slide is downsampled inconsistently across axis.
             Width ratio: {width_ratio}, Height ratio: {height_ratio}""")
