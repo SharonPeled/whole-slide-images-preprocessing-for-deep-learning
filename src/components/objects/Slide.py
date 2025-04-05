@@ -91,7 +91,7 @@ class Slide(Image):
                 target_h = 2 ** int(math.ceil(math.log2(height_r)))
                 target_w = 2 ** int(math.ceil(math.log2(width_r)))
                 self.log(f"""Padding reduced image: {target_w, target_h}.""", log_importance=1)
-                white_bg = pyvips.Image.black(w_target, h_target).new_from_image([255, 255, 255])
+                white_bg = pyvips.Image.black(target_w, target_h).new_from_image([255, 255, 255])
                 padded_img = white_bg.insert(self.img_r, 0, 0)
                 self.img_r = padded_img
 
