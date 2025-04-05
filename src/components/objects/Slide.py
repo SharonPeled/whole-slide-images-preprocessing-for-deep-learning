@@ -65,18 +65,27 @@ class Slide(Image):
         if isinstance(load_level, int):
             load_level = [load_level, ]  # insert to list to easy iteration
         if isinstance(load_level, list):
-            for level in load_level:
-                if int(self.img.get('openslide.level-count')) - 1 >= level:
-                    downsample = int(self.width / float(self.img.get(f'openslide.level[{level}].width')))
-                    if not tile_size % downsample == 0:
-                        # downsize should be divisible by tile_size
-                        continue
-                    self.img_r = pyvips.Image.new_from_file(self.path, level=level).extract_band(0, n=3)  # removing alpha channel
-                    self.img_r_level = int(level)
-                    break
+            try:
+                for level in load_level:
+                    if int(self.img.get('openslide.level-count')) - 1 >= level:
+                        downsample = int(self.width / float(self.img.get(f'openslide.level[{level}].width')))
+                        if not tile_size % downsample == 0:
+                            # downsize should be divisible by tile_size
+                            continue
+                        self.img_r = pyvips.Image.new_from_file(self.path, level=level).extract_band(0, n=3)  # removing alpha channel
+                        self.img_r_level = int(level)
+                        break
+            except Exception as e:
+                Logger.log(f'Level not found: {load_level}.', log_importance=2)
+                Logger.log([(attr, self.img.get(attr)) for attr in self.img.get_fields()], log_importance=2)
+
+                downsample_f = 2 ** load_level[0]
+                Logger.log(f'Using manual downsampling: {downsample_f}', log_importance=2)
+
+                self.img_r = pyvips.Image.new_from_file(self.path).extract_band(0, n=3).resize(1.0 / downsample_f)
+                self.img_r_level = int(load_level[0])
         if self.img_r is None:
-            Logger.log(f'Level not found: {load_level}.', log_importance=2)
-            Logger.log([(attr, self.img.get(attr)) for attr in self.img.get_fields()], log_importance=2)
+            Logger.log(f'Level not found: {load_level} and manual resizing failed.', log_importance=2)
             raise Exception(f"Loading level {load_level} failed.")
         self.img_r.write_to_memory()
         height_r, width_r = self.img_r.height, self.img_r.width
