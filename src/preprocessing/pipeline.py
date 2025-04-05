@@ -28,7 +28,8 @@ def execute_preprocessing_pipeline(with_tiling, num_processes, slide_uuids):
         ('slide', Pipeline([
             ('load_slide', LoggingFunctionTransformer(load_slide)),
             ('scale_mpp', LoggingFunctionTransformer(resize, kw_args={'target_mag_power': Configs.get('TARGET_MAG_POWER'),
-                                                                      'mag_attr': Configs.get('MAG_ATTR')})),
+                                                                      'mag_attr': Configs.get('MAG_ATTR'),
+                                                                      'tile_size': Configs.get('TILE_SIZE')})),
             ('load_reduced_image_to_memory', LoggingFunctionTransformer(load_reduced_image_to_memory,
                                                                         kw_args={'load_level': Configs.get('REDUCED_LEVEL_TO_MEMORY'),
                                                                                  'tile_size': Configs.get('TILE_SIZE')})),
