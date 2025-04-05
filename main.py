@@ -22,7 +22,7 @@ def main():
     # requires AWS camelyon toolkit
     parser.add_argument('--manifest_path', type=str, default='Camelyon16_manifest.csv')  # for camelyon, simply put the slide ids in a csv
     parser.add_argument('--num-slides-per-full-process', type=int)
-    parser.add_argument('--Camelyon', default=True)
+    parser.add_argument('--Camelyon', type=int)
     parser.add_argument('--aws_path', type=str, default='aws')  # for camelyon, simply put the slide ids in a csv
     # for internal use only!
     parser.add_argument('--full-preprocess-batch', action='store_true')

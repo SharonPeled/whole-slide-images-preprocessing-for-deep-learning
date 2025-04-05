@@ -6,10 +6,10 @@ from src.configs import Configs
 from src.components.objects.Logger import Logger
 
 
-def download_slides_camelyon(slides_dir, slides_str, full_batch_ind):
+def download_slides_camelyon(slides_dir, slides_str, full_batch_ind, camelyon_vesrion):
     Logger.log('Start Downloading Camelyon..', log_importance=1)
 
-    aws_camelyon_download_cmd = f"""{Configs.get('aws_path')} s3 cp s3://camelyon-dataset/CAMELYON16/images/{{slide_filename}} {{slide_dir_path}}/{{slide_filename}} --no-sign-request >> {full_batch_ind}_download_log_{{slide_id}}_{get_time()}.txt 2>&1"""
+    aws_camelyon_download_cmd = f"""{Configs.get('aws_path')} s3 cp s3://camelyon-dataset/CAMELYON{camelyon_vesrion}/images/{{slide_filename}} {{slide_dir_path}}/{{slide_filename}} --no-sign-request >> {full_batch_ind}_download_log_{{slide_id}}_{get_time()}.txt 2>&1"""
     slide_ids = slides_str.split(' ')
     for slide_id in slide_ids:
         try:
@@ -36,7 +36,7 @@ def download_slides_camelyon(slides_dir, slides_str, full_batch_ind):
 
 def download_slides(slides_dir, slides_str, full_batch_ind):
     if Configs.get('Camelyon'):
-        return download_slides_camelyon(slides_dir, slides_str, full_batch_ind)
+        return download_slides_camelyon(slides_dir, slides_str, full_batch_ind, Configs.get('Camelyon'))
     try:
         Logger.log('Start Downloading ..', log_importance=1)
         os.makedirs(slides_dir, exist_ok=True)
