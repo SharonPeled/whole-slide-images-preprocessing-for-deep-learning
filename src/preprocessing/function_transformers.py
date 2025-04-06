@@ -75,14 +75,17 @@ def filter_otsu_reduced_image(slide, black_mask, color_palette, reduced_img_fact
     img_r_bw = slide.img_r.colourspace("b-w")
 
     # filter out black pixels so they won't skew the otsu value
-    img_r_bw_np = img_r_bw.numpy()
-    if black_mask is not None:
-        valid_pixels = img_r_bw_np[~black_mask]
-    else:
-        valid_pixels = img_r_bw_np.ravel()
+    # img_r_bw_np = img_r_bw.numpy()
+    # if black_mask is not None:
+    #     valid_pixels = img_r_bw_np[~black_mask]
+    # else:
+    #     valid_pixels = img_r_bw_np.ravel()
+    #
+    # hist = np.histogram(valid_pixels, bins=256, range=(0, 255))
+    # otsu_val = filters.threshold_otsu(image=None, hist=hist)
 
-    hist = np.histogram(valid_pixels, bins=256, range=(0, 255))
-    otsu_val = filters.threshold_otsu(image=None, hist=hist)
+    hist = img_r_bw.hist_find().numpy()
+    otsu_val = filters.threshold_otsu(image=None, hist=(hist.squeeze(), range(256)))
 
     slide.set('otsu_val', otsu_val)
     tile_size_r = slide.get('tile_size_r')
