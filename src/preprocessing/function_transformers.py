@@ -70,7 +70,7 @@ def center_crop(slide):
     return slide.crop(y_margins, x_margins, cropped_width, cropped_height)
 
 
-def filter_otsu_reduced_image(slide, color_palette, reduced_img_factor, **kwargs):
+def filter_otsu_reduced_image(slide, black_mask, color_palette, reduced_img_factor, **kwargs):
     h, s, v = np.rollaxis(slide.img_r.sRGB2HSV().numpy(), -1)
     img_r_bw = slide.img_r.colourspace("b-w")
     hist = img_r_bw.hist_find().numpy()
@@ -93,7 +93,7 @@ def filter_black_reduced_image(slide, color_palette, **kwargs):
     tile_size_r = slide.get('tile_size_r')
     tile_black_pixel_sum = conv2d_to_device(mask, tile_size_r, tile_size_r, slide.device)
     tile_black_fracs = tile_black_pixel_sum / (tile_size_r ** 2)
-    return tile_black_fracs
+    return tile_black_fracs, mask
 
 
 def filter_pen_reduced_image(slide, color_palette, **kwargs):
@@ -108,8 +108,8 @@ def filter_pen_reduced_image(slide, color_palette, **kwargs):
 
 
 def filter_non_tissue_tiles(slide, non_tissue_threshold, otsu_filter, black_filter, pen_filter):
-    tile_background_fracs = filter_otsu_reduced_image(slide, **otsu_filter)
-    tile_black_fracs = filter_black_reduced_image(slide, **black_filter) if black_filter is not None else np.zeros(tile_background_fracs.shape)
+    tile_black_fracs, black_mask = filter_black_reduced_image(slide, **black_filter) if black_filter is not None else np.zeros(tile_background_fracs.shape)
+    tile_background_fracs = filter_otsu_reduced_image(slide, black_mask, **otsu_filter)
     tile_pen_fracs = filter_pen_reduced_image(slide, **pen_filter) if pen_filter is not None else np.zeros(tile_background_fracs.shape)
     filters_array_list = [tile_background_fracs, tile_black_fracs, tile_pen_fracs]
     num_filtered_per_filter = list(map(lambda f: (f>non_tissue_threshold).sum(), filters_array_list))

@@ -63,7 +63,12 @@ def delete_slides(slide_ids, slides_dir):
     print('Start Delete ..')
     for slide_id in slide_ids:
         dir_path = os.path.join(slides_dir, slide_id)
-        shutil.rmtree(dir_path)
+        if os.path.exists(dir_path):
+            for file_name in os.listdir(dir_path):
+                if file_name.endswith(('.svs', '.tif')):
+                    file_path = os.path.join(dir_path, file_name)
+                    os.remove(file_path)
+                    print(f"Deleted: {file_path}")
     print(f"Finished Delete {len(slide_ids)} slides.")
 
 
@@ -75,7 +80,7 @@ def get_bash_str_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_
     return bash_str
 
 
-def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_filepath, delete_after_tiling):
+def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_filepath, delete_slides_after_tiling):
     slide_ids = [slide_id.strip("'") for slide_id in slide_ids]
     Logger.log(f'Starting processing slides: {slide_ids}', log_importance=1)
     try:
@@ -91,7 +96,7 @@ def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_fi
 
         # print(proc1.stderr.readlines())
         Logger.log(f'Finished {full_batch_ind} batch tiling process.', log_importance=1)
-        if delete_after_tiling:
+        if delete_slides_after_tiling:
             delete_slides(slide_ids, Configs.get('SLIDES_DIR'))
     except Exception as e:
         Logger.log(f"Main program received {e}", log_importance=2)

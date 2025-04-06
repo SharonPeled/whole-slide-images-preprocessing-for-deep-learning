@@ -12,7 +12,7 @@ def main():
     parser.add_argument('--config_filepath', type=str, required=True)
     parser.add_argument('--preprocess', action='store_true')
     parser.add_argument('--full-preprocess', action='store_true')
-    parser.add_argument('--delete-after-tiling', action='store_true')
+    parser.add_argument('--delete-slides-after-tiling', action='store_true')
     parser.add_argument("--slide_uuids", nargs="+", type=str)
     parser.add_argument('--thumbnails-only', action='store_true')
     parser.add_argument('--bring-thumbnails', type=str)
@@ -55,11 +55,11 @@ def main():
                         args.num_slides_per_full_process if args.num_slides_per_full_process else -1,
                         args.num_tiling_subprocesses if args.num_tiling_subprocesses else 1,
                         args.manifest_path,
-                        args.delete_after_tiling)
+                        args.delete_slides_after_tiling)
     if args.full_preprocess_batch:
         from src.full_preprocessing.preprocess_batch import full_batch_preprocess
         full_batch_preprocess(args.slide_uuids, args.num_tiling_subprocesses, args.full_batch_ind,
-                              args.config_filepath, args.delete_after_tiling)
+                              args.config_filepath, args.delete_slides_after_tiling)
     if args.thumbnails_only:
         from src.preprocessing.pipeline import execute_preprocessing_pipeline
         execute_preprocessing_pipeline(with_tiling=False, num_processes=args.num_tiling_subprocesses,

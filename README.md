@@ -28,7 +28,7 @@ The pipeline provides a range of command-line options to customize its operation
 - `--config_filepath <path>`: Specifies the path to the configuration file. This parameter is required.
 - `--preprocess`: Initiates the preprocessing pipeline with tiling.
 - `--full-preprocess`: Activates a complete preprocessing flow, including slide downloading (requires `--manifest_path`).
-- `--delete-after-tiling`: Deletes the slide files after tiling to save disk space.
+- `--delete-slides-after-tiling`: Deletes the slide files after tiling to save disk space. Leaves tiling artifacts (e.g. thumbnail.png).
 - `--slide_uuids <UUIDs>`: Specifies the UUIDs of slides to be processed. Accepts multiple UUIDs.
 - `--thumbnails-only`: Generates thumbnails without extracting full-resolution tiles.
 - `--bring-thumbnails <path>`: Fetches and displays thumbnails for validation.
