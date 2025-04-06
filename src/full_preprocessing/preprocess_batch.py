@@ -14,7 +14,7 @@ def download_slides_camelyon(slides_dir, slides_str, full_batch_ind, camelyon_ve
     for slide_id in slide_ids:
         try:
             slide_dir_path = os.path.join(slides_dir, slide_id)
-            os.mkdir(slide_dir_path, exist_ok=True)
+            os.makedirs(slide_dir_path, exist_ok=True)
 
             download_slide_bash_str = aws_camelyon_download_cmd.format(slide_filename=slide_id+'.tif', slide_dir_path=slide_dir_path, slide_id=slide_id)
             proc = subprocess.Popen([download_slide_bash_str], stdout=subprocess.PIPE,
