@@ -4,6 +4,7 @@ from src.utils import get_time
 import shutil
 from src.configs import Configs
 from src.components.objects.Logger import Logger
+import json
 
 
 def download_slides_camelyon(slides_dir, slides_str, full_batch_ind, camelyon_vesrion):
