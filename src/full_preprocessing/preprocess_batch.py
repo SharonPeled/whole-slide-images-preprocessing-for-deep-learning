@@ -97,7 +97,7 @@ def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_fi
                           metadata_filename):
     slide_ids = [slide_id.strip("'") for slide_id in slide_ids]
     Logger.log(f'Starting processing slides: {slide_ids}', log_importance=1)
-    processed_slides = get_already_processed_slides(slide_ids, slides_dir, metadata_filename)
+    processed_slides = get_already_processed_slides(slide_ids, Configs.get('SLIDES_DIR'), metadata_filename)
     not_processed_slides = [slide_id for slide_id in slide_ids if slide_id not in processed_slides]
     Logger.log(f'Slides: {processed_slides}, already processed.', log_importance=1)
     Logger.log(f'Continuing processing {not_processed_slides} slides.', log_importance=1)
