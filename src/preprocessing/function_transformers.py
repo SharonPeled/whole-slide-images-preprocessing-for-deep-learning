@@ -100,11 +100,23 @@ def filter_otsu_reduced_image(slide, black_mask, color_palette, reduced_img_fact
 
 
 def filter_black_reduced_image(slide, color_palette, **kwargs):
-    h,s,v = np.rollaxis(slide.img_r.sRGB2HSV().numpy(), -1)
-    mask = (v < color_palette[0]['v']) | ((v < color_palette[1]['v']) & (s < color_palette[1]['s']))
+    h, s, v = np.rollaxis(slide.img_r.sRGB2HSV().numpy(), -1)
+
+    # --- Original logic ---
+    low_dark = v < color_palette[0]['v']  # very dark
+    low_sat_dark = (v < color_palette[1]['v']) & (s < color_palette[1]['s'])  # dark gray
+
+    # --- Optional third entry for bright gray ---
+    if len(color_palette) > 2:
+        low_sat_bright = (v > color_palette[2]['v']) & (s < color_palette[2]['s'])  # bright gray
+        mask = low_dark | low_sat_dark | low_sat_bright
+    else:
+        mask = low_dark | low_sat_dark
+
     tile_size_r = slide.get('tile_size_r')
     tile_black_pixel_sum = conv2d_to_device(mask, tile_size_r, tile_size_r, slide.device)
     tile_black_fracs = tile_black_pixel_sum / (tile_size_r ** 2)
+
     return tile_black_fracs, mask
 
 
