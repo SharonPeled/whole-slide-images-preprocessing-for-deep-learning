@@ -104,7 +104,7 @@ def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_fi
     Logger.log(f'Continuing processing {not_processed_slides} slides.', log_importance=1)
     if len(not_processed_slides) == 0:
         Logger.log(f'All slides are already processed!', log_importance=1)
-        Logger.log(f'Finished {full_batch_ind} batch tiling process.', log_importance=1)
+        Logger.log(f'Finished batch {full_batch_ind} tiling process.', log_importance=1)
         return
     try:
         download_slides(slides_dir=Configs.get('SLIDES_DIR'), slides_str=' '.join(not_processed_slides),
@@ -118,7 +118,7 @@ def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_fi
         proc1.wait()
 
         # print(proc1.stderr.readlines())
-        Logger.log(f'Finished {full_batch_ind} batch tiling process.', log_importance=1)
+        Logger.log(f'Finished batch {full_batch_ind} tiling process.', log_importance=1)
         if delete_slides_after_tiling:
             delete_slides(not_processed_slides, Configs.get('SLIDES_DIR'))
     except Exception as e:
