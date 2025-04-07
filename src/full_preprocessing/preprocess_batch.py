@@ -80,9 +80,31 @@ def get_bash_str_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_
     return bash_str
 
 
-def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_filepath, delete_slides_after_tiling):
+def get_already_processed_slides(slide_ids, slides_dir, metadata_filename):
+    processed_slides = []
+    for slide_id in slide_ids:
+        metadata_path = os.path.join(slides_dir, slide_id, metadata_filename)
+        if not os.path.exists(metadata_path):
+            continue
+        with open(metadata_path, 'r') as file:
+            loaded_metadata = json.load(file)
+            if loaded_metadata.get('Done preprocessing'):
+                processed_slides.append(slide_id)
+    return processed_slides
+
+
+def full_batch_preprocess(slide_ids, num_subprocesses, full_batch_ind, config_filepath, delete_slides_after_tiling,
+                          metadata_filename):
     slide_ids = [slide_id.strip("'") for slide_id in slide_ids]
     Logger.log(f'Starting processing slides: {slide_ids}', log_importance=1)
+    processed_slides = get_already_processed_slides(slide_ids, slides_dir, metadata_filename)
+    not_processed_slides = [slide_id for slide_id in slide_ids if slide_id not in processed_slides]
+    Logger.log(f'Slides: {processed_slides}, already processed.', log_importance=1)
+    Logger.log(f'Continuing processing {not_processed_slides} slides.', log_importance=1)
+    if len(not_processed_slides) == 0:
+        Logger.log(f'All slides are already processed!', log_importance=1)
+        Logger.log(f'Finished {full_batch_ind} batch tiling process.', log_importance=1)
+        return
     try:
         download_slides(slides_dir=Configs.get('SLIDES_DIR'), slides_str=' '.join(slide_ids),
                         full_batch_ind=full_batch_ind)

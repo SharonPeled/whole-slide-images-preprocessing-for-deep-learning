@@ -59,7 +59,8 @@ def main():
     if args.full_preprocess_batch:
         from src.full_preprocessing.preprocess_batch import full_batch_preprocess
         full_batch_preprocess(args.slide_uuids, args.num_tiling_subprocesses, args.full_batch_ind,
-                              args.config_filepath, args.delete_slides_after_tiling)
+                              args.config_filepath, args.delete_slides_after_tiling,
+                              Configs.get('METADATA_JSON_FILENAME'))
     if args.thumbnails_only:
         from src.preprocessing.pipeline import execute_preprocessing_pipeline
         execute_preprocessing_pipeline(with_tiling=False, num_processes=args.num_tiling_subprocesses,
