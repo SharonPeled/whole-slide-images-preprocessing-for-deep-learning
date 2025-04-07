@@ -100,6 +100,9 @@ def filter_otsu_reduced_image(slide, black_mask, color_palette, reduced_img_fact
 
 
 def filter_black_reduced_image(slide, color_palette, **kwargs):
+    # h, s, v = np.rollaxis(slide.img_r.sRGB2HSV().numpy(), -1)
+    # mask = (v < color_palette[0]['v']) | ((v < color_palette[1]['v']) & (s < color_palette[1]['s']))
+
     h, s, v = np.rollaxis(slide.img_r.sRGB2HSV().numpy(), -1)
 
     # --- Original logic ---
